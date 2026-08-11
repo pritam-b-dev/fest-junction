@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSession } from "@/lib/useSession";
+import { User } from "@/lib/types";
 import {
   FiUser,
   FiPhone,
@@ -10,28 +11,21 @@ import {
   FiAlertCircle,
 } from "react-icons/fi";
 
-export default function ProfilePage() {
-  const { user, refetchSession } = useSession();
+interface ProfileFormProps {
+  user: User;
+  refetchSession: () => Promise<void>;
+}
 
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [avatar, setAvatar] = useState("");
+function ProfileForm({ user, refetchSession }: ProfileFormProps) {
+  const [name, setName] = useState(user.name || "");
+  const [phone, setPhone] = useState(user.phone || "");
+  const [avatar, setAvatar] = useState(user.avatar || "");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (user) {
-      setName(user.name || "");
-      setPhone(user.phone || "");
-      setAvatar(user.avatar || "");
-    }
-  }, [user]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
-
     setLoading(true);
     setSuccess(false);
     setError(null);
@@ -50,7 +44,7 @@ export default function ProfilePage() {
       }
 
       setSuccess(true);
-      refetchSession();
+      await refetchSession();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
@@ -59,11 +53,10 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="space-y-6">
-      <h2 className="font-display text-xl font-bold text-white">
-        Profile Settings
-      </h2>
-
+    <form
+      onSubmit={handleSubmit}
+      className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5"
+    >
       {success && (
         <div className="bg-emerald-950/40 border border-emerald-800/60 rounded-xl p-4 flex items-center gap-3 text-emerald-300 text-xs">
           <FiCheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
@@ -78,62 +71,83 @@ export default function ProfilePage() {
         </div>
       )}
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5"
-      >
-        <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-slate-300 flex items-center gap-2">
-            <FiUser className="w-3.5 h-3.5 text-brand-primary" />
-            <span>Full Name</span>
-          </label>
-          <input
-            type="text"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-brand-primary"
-          />
-        </div>
+      <div className="space-y-1.5">
+        <label className="text-xs font-semibold text-slate-300 flex items-center gap-2">
+          <FiUser className="w-3.5 h-3.5 text-brand-primary" />
+          <span>Full Name</span>
+        </label>
+        <input
+          type="text"
+          required
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-brand-primary"
+        />
+      </div>
 
-        <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-slate-300 flex items-center gap-2">
-            <FiPhone className="w-3.5 h-3.5 text-brand-accent" />
-            <span>Phone Number</span>
-          </label>
-          <input
-            type="text"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="+1 234 567 890"
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-brand-primary"
-          />
-        </div>
+      <div className="space-y-1.5">
+        <label className="text-xs font-semibold text-slate-300 flex items-center gap-2">
+          <FiPhone className="w-3.5 h-3.5 text-brand-accent" />
+          <span>Phone Number</span>
+        </label>
+        <input
+          type="text"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="+1 234 567 890"
+          className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-brand-primary"
+        />
+      </div>
 
-        <div className="space-y-1.5">
-          <label className="text-xs font-semibold text-slate-300 flex items-center gap-2">
-            <FiImage className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Avatar URL</span>
-          </label>
-          <input
-            type="url"
-            value={avatar}
-            onChange={(e) => setAvatar(e.target.value)}
-            placeholder="https://example.com/avatar.jpg"
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-brand-primary"
-          />
-        </div>
+      <div className="space-y-1.5">
+        <label className="text-xs font-semibold text-slate-300 flex items-center gap-2">
+          <FiImage className="w-3.5 h-3.5 text-cyan-400" />
+          <span>Avatar URL</span>
+        </label>
+        <input
+          type="url"
+          value={avatar}
+          onChange={(e) => setAvatar(e.target.value)}
+          placeholder="https://example.com/avatar.jpg"
+          className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-brand-primary"
+        />
+      </div>
 
-        <div className="pt-2 flex justify-end">
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-5 py-2.5 rounded-xl bg-brand-primary text-white text-xs font-semibold hover:bg-brand-hover transition-colors disabled:opacity-50"
-          >
-            {loading ? "Saving Changes..." : "Save Changes"}
-          </button>
+      <div className="pt-2 flex justify-end">
+        <button
+          type="submit"
+          disabled={loading}
+          className="px-5 py-2.5 rounded-xl bg-brand-primary text-white text-xs font-semibold hover:bg-brand-hover transition-colors disabled:opacity-50"
+        >
+          {loading ? "Saving Changes..." : "Save Changes"}
+        </button>
+      </div>
+    </form>
+  );
+}
+
+export default function ProfilePage() {
+  const { user, loading, refetchSession } = useSession();
+
+  if (loading || !user) {
+    return (
+      <div className="space-y-6">
+        <h2 className="font-display text-xl font-bold text-white">
+          Profile Settings
+        </h2>
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-slate-400 text-xs">
+          Loading user profile...
         </div>
-      </form>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <h2 className="font-display text-xl font-bold text-white">
+        Profile Settings
+      </h2>
+      <ProfileForm key={user.id} user={user} refetchSession={refetchSession} />
     </div>
   );
 }
