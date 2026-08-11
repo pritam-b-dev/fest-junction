@@ -1,4 +1,3 @@
-// lib/types.ts
 export type UserRole = "ADMIN" | "ORGANIZER" | "ATTENDEE";
 
 export interface User {
@@ -27,6 +26,11 @@ export interface EventItem {
   category: Category;
   categoryId: string;
   organizerId: string;
+  organizer?: {
+    id: string;
+    name: string;
+    email: string;
+  };
   startDate: string;
   endDate?: string;
   price: number;
@@ -36,6 +40,18 @@ export interface EventItem {
   imageUrl?: string;
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface Review {
+  id: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  user?: {
+    id: string;
+    name: string;
+    avatar?: string;
+  };
 }
 
 export interface ApiResponse<T = unknown> {
