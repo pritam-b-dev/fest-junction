@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { serverFetch } from "@/lib/serverFetch";
-import { ApiResponse, User } from "@/lib/types";
+import { ApiResponse } from "@/lib/types";
 
 export async function PATCH(
   request: Request,
@@ -10,7 +10,7 @@ export async function PATCH(
     const { id } = await params;
     const body = await request.json();
 
-    const res = await serverFetch<ApiResponse<User>>(`/users/${id}`, {
+    const res = await serverFetch<ApiResponse<unknown>>(`/categories/${id}`, {
       method: "PATCH",
       body: JSON.stringify(body),
     });
@@ -19,7 +19,8 @@ export async function PATCH(
       return NextResponse.json(
         {
           success: false,
-          message: res.error || res.data?.message || "Failed to update profile",
+          message:
+            res.error || res.data?.message || "Failed to update category",
         },
         { status: res.status || 400 },
       );
@@ -27,7 +28,7 @@ export async function PATCH(
 
     return NextResponse.json({
       success: true,
-      message: res.data.message || "Profile updated successfully",
+      message: res.data.message || "Category updated successfully",
       data: res.data.data,
     });
   } catch (error) {
@@ -47,7 +48,7 @@ export async function DELETE(
   try {
     const { id } = await params;
 
-    const res = await serverFetch<ApiResponse<unknown>>(`/users/${id}`, {
+    const res = await serverFetch<ApiResponse<unknown>>(`/categories/${id}`, {
       method: "DELETE",
     });
 
@@ -55,7 +56,8 @@ export async function DELETE(
       return NextResponse.json(
         {
           success: false,
-          message: res.error || res.data?.message || "Failed to delete user",
+          message:
+            res.error || res.data?.message || "Failed to delete category",
         },
         { status: res.status || 400 },
       );
@@ -63,7 +65,7 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: res.data.message || "User deleted successfully",
+      message: res.data.message || "Category deleted successfully",
       data: res.data.data,
     });
   } catch (error) {
