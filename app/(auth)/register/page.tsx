@@ -1,11 +1,12 @@
 "use client";
-
+import { useSession } from "@/lib/useSession";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FiUser, FiMail, FiLock, FiUserPlus, FiCalendar } from "react-icons/fi";
 
 export default function RegisterPage() {
+  const { refetchSession } = useSession();
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -32,7 +33,7 @@ export default function RegisterPage() {
         setLoading(false);
         return;
       }
-
+      await refetchSession();
       router.push("/");
       router.refresh();
     } catch {
