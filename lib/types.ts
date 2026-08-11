@@ -54,6 +54,21 @@ export interface Review {
   };
 }
 
+export type BookingStatus = "PENDING" | "CONFIRMED" | "CANCELLED" | "COMPLETED";
+
+export interface Booking {
+  id: string;
+  userId: string;
+  eventId: string;
+  event: EventItem;
+  seats: number;
+  totalPrice: number;
+  status: BookingStatus;
+  hasReview?: boolean;
+  createdAt: string;
+  updatedAt?: string;
+}
+
 export interface ApiResponse<T = unknown> {
   success: boolean;
   message: string;
