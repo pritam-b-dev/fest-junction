@@ -22,7 +22,7 @@ export default function DashboardNav({ userRole }: DashboardNavProps) {
   if (userRole === "ORGANIZER" || userRole === "ADMIN") {
     navItems.push({
       label: "My Events",
-      href: "/dashboard/organizer",
+      href: "/dashboard/my-events",
       icon: BsCalendarEvent,
     });
   }

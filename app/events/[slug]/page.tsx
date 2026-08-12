@@ -168,7 +168,7 @@ export default async function EventDetailPage({
               eventId={event.id}
               price={event.price}
               capacity={event.capacity}
-              bookedSeats={event.bookedSeats}
+              bookedSeats={event.capacity - (event.availableSeats ?? 0)}
             />
           </div>
         </div>
