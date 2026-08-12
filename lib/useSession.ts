@@ -39,5 +39,17 @@ export function useSession() {
     };
   }, []);
 
+  useEffect(() => {
+    const handleSessionChange = () => {
+      refetchSession();
+    };
+
+    window.addEventListener("session-changed", handleSessionChange);
+
+    return () => {
+      window.removeEventListener("session-changed", handleSessionChange);
+    };
+  }, [refetchSession]);
+
   return { user, loading, refetchSession };
 }

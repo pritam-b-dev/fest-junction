@@ -34,6 +34,7 @@ export default function RegisterPage() {
         return;
       }
       await refetchSession();
+      window.dispatchEvent(new Event("session-changed"));
       router.push("/");
       router.refresh();
     } catch {

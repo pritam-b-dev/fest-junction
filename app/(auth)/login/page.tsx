@@ -33,6 +33,7 @@ export default function LoginPage() {
         return;
       }
       await refetchSession();
+      window.dispatchEvent(new Event("session-changed"));
       router.push("/");
       router.refresh();
     } catch {
