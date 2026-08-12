@@ -37,7 +37,7 @@ export interface EventItem {
   capacity: number;
   bookedSeats?: number;
   status: "DRAFT" | "PUBLISHED" | "CANCELLED";
-  imageUrl?: string;
+  images: string[];
   createdAt?: string;
   updatedAt?: string;
 }

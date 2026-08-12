@@ -105,7 +105,7 @@ export default async function EventsPage({ searchParams }: EventsPageProps) {
               categoryName={event.category?.name || "General"}
               startDate={event.startDate}
               price={event.price}
-              imageUrl={event.imageUrl}
+              imageUrl={event.images?.[0]}
             />
           ))}
         </div>

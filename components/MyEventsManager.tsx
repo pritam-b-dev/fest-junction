@@ -70,7 +70,7 @@ export default function MyEventsManager({
     setEditingEvent(event);
     setTitle(event.title);
     setDescription(event.description || "");
-    setImages(event.imageUrl || "");
+    setImages(event.images?.join(", ") || "");
     setLocation(event.location || "");
     setPrice(event.price);
     setCapacity(event.capacity);
@@ -95,12 +95,15 @@ export default function MyEventsManager({
     setLoading(true);
     setError(null);
 
-    const imageUrl = images.split(",")[0]?.trim() || "";
+    const imageList = images
+      .split(",")
+      .map((url) => url.trim())
+      .filter(Boolean);
 
     const payload = {
       title,
       description,
-      imageUrl,
+      images: imageList,
       location,
       price: Number(price),
       capacity: Number(capacity),

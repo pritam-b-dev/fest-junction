@@ -1,50 +1,16 @@
+import { EventItem } from "@/lib/types";
 import Link from "next/link";
 import EventCard from "@/components/EventCard";
 import { FiArrowRight, FiCompass, FiZap, FiCheckCircle } from "react-icons/fi";
 import { IoShieldCheckmark } from "react-icons/io5";
 
-const PLACEHOLDER_EVENTS = [
-  {
-    id: "1",
-    slug: "neon-lights-music-festival-2026",
-    title: "Neon Lights Music & Arts Festival",
-    categoryName: "Music",
-    startDate: "2026-09-15T18:00:00Z",
-    price: 85,
-    imageUrl:
-      "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "2",
-    slug: "global-tech-innovators-summit",
-    title: "Global Tech Innovators Summit 2026",
-    categoryName: "Technology",
-    startDate: "2026-10-02T09:00:00Z",
-    price: 150,
-    imageUrl:
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "3",
-    slug: "culinary-masterclass-gourmet-night",
-    title: "Gourmet Food & Wine Masterclass",
-    categoryName: "Food & Drinks",
-    startDate: "2026-08-28T17:30:00Z",
-    price: 60,
-    imageUrl:
-      "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: "4",
-    slug: "indie-film-creators-showcase",
-    title: "Indie Film Creators & Directors Showcase",
-    categoryName: "Cinema",
-    startDate: "2026-11-05T14:00:00Z",
-    price: 0,
-    imageUrl:
-      "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=800&q=80",
-  },
-];
+const response = await fetch(`${process.env.API_URL}/events?limit=4`, {
+  cache: "no-store",
+});
+
+const result = await response.json();
+
+const events: EventItem[] = result.data || [];
 
 export default function HomePage() {
   return (
@@ -133,8 +99,17 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {PLACEHOLDER_EVENTS.map((event) => (
-            <EventCard key={event.id} {...event} />
+          {events.map((event) => (
+            <EventCard
+              key={event.id}
+              id={event.id}
+              slug={event.slug}
+              title={event.title}
+              categoryName={event.category?.name || "General"}
+              startDate={event.startDate}
+              price={event.price}
+              imageUrl={event.images?.[0]}
+            />
           ))}
         </div>
       </section>

@@ -59,7 +59,7 @@ export default async function EventDetailPage({
       <div className="relative h-72 sm:h-96 w-full rounded-3xl overflow-hidden bg-slate-900 border border-slate-800">
         <img
           src={
-            event.imageUrl ||
+            event.images?.[0] ||
             "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1200&q=80"
           }
           alt={event.title}

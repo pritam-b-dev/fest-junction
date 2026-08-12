@@ -75,7 +75,7 @@ export default async function BookingsPage() {
                   <div className="w-20 h-20 rounded-xl bg-slate-950 overflow-hidden shrink-0 border border-slate-800">
                     <img
                       src={
-                        booking.event?.imageUrl ||
+                        booking.event?.images?.[0] ||
                         "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80"
                       }
                       alt={booking.event?.title || "Event"}
