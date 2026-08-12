@@ -1,5 +1,5 @@
 "use client";
-
+import BookingStatusActions from "@/components/BookingStatusActions";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Category, EventItem, Booking } from "@/lib/types";
@@ -254,7 +254,58 @@ export default function MyEventsManager({
           })}
         </div>
       )}
-
+      <div className="space-y-4">
+        <h2 className="font-display text-xl font-bold text-white">
+          Booking Requests
+        </h2>
+        {bookings.length === 0 ? (
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 text-center text-slate-400 text-xs">
+            No bookings yet for your events.
+          </div>
+        ) : (
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-x-auto">
+            <table className="w-full text-left text-xs text-slate-300">
+              <thead className="text-[11px] uppercase bg-slate-950 text-slate-400">
+                <tr>
+                  <th className="p-3">Event</th>
+                  <th className="p-3">Attendee</th>
+                  <th className="p-3">Seats</th>
+                  <th className="p-3">Total</th>
+                  <th className="p-3">Status</th>
+                  <th className="p-3 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60">
+                {bookings.map((b) => (
+                  <tr key={b.id}>
+                    <td className="p-3 font-semibold text-white">
+                      {b.event?.title || "—"}
+                    </td>
+                    <td className="p-3 text-slate-400">
+                      {b.user?.name || b.userId}
+                    </td>
+                    <td className="p-3">{b.seats}</td>
+                    <td className="p-3 font-bold text-white">
+                      ${b.totalPrice}
+                    </td>
+                    <td className="p-3">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-300">
+                        {b.status}
+                      </span>
+                    </td>
+                    <td className="p-3">
+                      <BookingStatusActions
+                        bookingId={b.id}
+                        status={b.status}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
       {showModal && (
         <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl p-6 space-y-5 my-8">

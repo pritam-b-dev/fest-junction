@@ -62,6 +62,7 @@ export interface Booking {
   userId: string;
   eventId: string;
   event: EventItem;
+  user?: { id: string; name: string; email: string; phone?: string };
   seats: number;
   totalPrice: number;
   status: BookingStatus;
